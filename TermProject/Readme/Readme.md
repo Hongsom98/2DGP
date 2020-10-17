@@ -26,7 +26,7 @@
 > > - 로고 애니메이션 ( 1 ~ 2 초 재생) 
 > > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/Logo.gif">
 > > - 메뉴 이미지 (Start, Exit, 선택 박스 출력)
-> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/Menu.png">
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/MenuImage.png">
 > > - 캐릭터 셀렉 씬
 > > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/CharacterSelect.png">
 > > - 인 게임
