@@ -9,7 +9,7 @@
 > - Scene의 수 및 각각의 이름
 > > - 총 5개의 씬
 > > - Logo, Menu, CharacterSelect, Ingame, Result 씬으로 구성된다.
-> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/diagram.PNG">
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/Diagram.PNG">
 
 > - 필요한 기술
 > > - 효율적인 프레임워크 제작. 리소스 관리, 프레임 잡기
