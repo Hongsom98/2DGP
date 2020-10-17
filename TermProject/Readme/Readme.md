@@ -16,3 +16,20 @@
 > > - 파이썬에서의 이미지 라이브러리 사용법. 파이썬 문법
 > > - 파이썬에서의 사운드 관리 라이브러리.
 
+> - 게임 컨셉 -> 쿠키런 모작
+> - 기본적인 런게임의 기능 구현 및 각 캐릭터(쿠키)의 특수 능력 구현. 
+
+> - 개발 범위
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/DevelopmentScope.PNG">
+
+> - 예상 게임 흐름
+> > - 로고 애니메이션 ( 1 ~ 2 초 재생) 
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/Logo.gif">
+> > - 메뉴 이미지 (Start, Exit, 선택 박스 출력)
+> > <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/Menu.PNG">
+> > - 캐릭터 셀렉 씬
+> > <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/CharacterSelect.PNG">
+> > - 인 게임
+> > <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/In_game.PNG">
+> - 개발 일정
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/DevelopmentSchedule.PNG">
