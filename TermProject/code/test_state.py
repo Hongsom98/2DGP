@@ -5,14 +5,14 @@ import gobj
 from player import Player
 from background import HorzScrollBackground
 from platform import Platform
-from jelly import Jelly
+import HPui
 import stage_gen
 
 canvas_width = 1120
 canvas_height = 630
 
-def enter():
-    gfw.world.init(['bg', 'platform', 'enemy', 'item', 'player'])
+def enter(select):
+    gfw.world.init(['bg', 'platform', 'enemy', 'item', 'player', 'ui'])
 
     center = get_canvas_width() // 2, get_canvas_height() // 2
 
@@ -22,9 +22,13 @@ def enter():
         gfw.world.add(gfw.layer.bg, bg)
 
     global player
-    player = Player()
+    player = Player(select)
     player.bg = bg
     gfw.world.add(gfw.layer.player, player)
+
+    global ui
+    ui= HPui.Hpui(0.05)
+    gfw.world.add(gfw.layer.ui, ui)
 
     stage_gen.load(gobj.res('stage_01.txt'))
 
@@ -42,7 +46,6 @@ def update():
 
     check_items()
     check_obstacles()
-
     stage_gen.update(dx)
 
 def check_items():
@@ -55,8 +58,9 @@ def check_obstacles():
     for enemy in gfw.world.objects_at(gfw.layer.enemy):
         if enemy.hit: continue
         if gobj.collides_box(player, enemy):
-            print('Hit', enemy)
-            enemy.hit = True
+            if not player.state == 5:
+                ui.player_colide()
+                enemy.hit = True
 
 def draw():
     gfw.world.draw()

@@ -15,12 +15,13 @@ def get_jelly_rect(index):
 
 
 class Jelly:
-    TYPE_1, TYPE_2, TYPE_3, TYPE_R = range(4)
+    TYPE_1, TYPE_2, TYPE_3, TYPE_R, TYPE_I = range(5)
     def __init__(self, type, x, y):
         self.x, self.y = x, y
         self.image = gfw.image.load(gobj.res('jelly.png'))
         index = random.randint(3, 60) if type == Jelly.TYPE_R else type
         self.rect = get_jelly_rect(index)
+        self.type = type
     def update(self): pass
     def draw(self):
         self.image.clip_draw(*self.rect, self.x, self.y, JELLY_SIZE / 2, JELLY_SIZE / 2)

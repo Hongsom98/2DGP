@@ -1,4 +1,3 @@
-import random
 from pico2d import *
 import gfw
 import gobj
@@ -7,10 +6,11 @@ import json
 PLAYER_SIZE = 270
 
 class Player:
-    RUNNING, FALLING, JUMPING, DOUBLE_JUMP, SLIDING = range(5)
+    RUNNING, FALLING, JUMPING, DOUBLE_JUMP, SLIDING, HITTING = range(6)
     ANIMS_11x6 = [
         [ 0x40, 0x41, 0x42, 0x43 ], # RUNNING
         [ 0x50 ],                   # FALLING
+        [ 0x10 ],                   # HITTING
         [ 0x57, 0x58 ],             # JUMPING
         [ 0x51, 0x52, 0x53, 0x54 ], # DOUBLE_JUMP
         [ 0x59, 0x5A ],             # SLIDING
@@ -18,6 +18,7 @@ class Player:
     ANIMS_13x6 = [
         [ 0x40, 0x41, 0x42, 0x43 ], # RUNNING
         [ 0x50 ],                   # FALLING
+        [ 0x10 ],                   # HITTING
         [ 0x56, 0x57 ],             # JUMPING
         [ 0x51, 0x52, 0x53, 0x54 ], # DOUBLE_JUMP
         [ 0x58, 0x59 ],             # SLIDING
@@ -36,7 +37,7 @@ class Player:
     JUMP = 1000
 
     #constructor
-    def __init__(self):
+    def __init__(self, select):
         self.pos = 150, get_canvas_height() // 2
         self.delta = 0, 0
         # self.image = gfw.image.load(gobj.res('cookie.png'))
@@ -45,10 +46,11 @@ class Player:
         self.mag = 1
         self.mag_speed = 0
         # self.anims = Player.ANIMS_11x6
-        self.change_image(0)
+        self.change_image(select + 1)
         self.state = Player.RUNNING
         # self.char_time = 0
         # self.cookie_name = 'Brave Cookie'
+        print(select)
 
     @property
     def state(self):
@@ -79,9 +81,11 @@ class Player:
         self.mag_speed = -1.0
 
     def jump(self):
-        if self.state in [Player.FALLING, Player.DOUBLE_JUMP]:
+        if self.state in [Player.DOUBLE_JUMP]:
             return
         if self.state == Player.RUNNING:
+            self.state = Player.JUMPING
+        elif self.state == Player.FALLING:
             self.state = Player.JUMPING
         elif self.state == Player.JUMPING:
             self.state = Player.DOUBLE_JUMP
@@ -116,6 +120,7 @@ class Player:
                     self.state = Player.RUNNING
                     self.jump_speed = 0
                     # print('Now running', t, foot)
+        print(self.state)
 
     def get_platform(self, foot):
         selected = None
@@ -216,7 +221,7 @@ class Player:
         if not hasattr(self, 'cookie_chars'):
             with open(gobj.res('cookies.json'), 'r') as f:
                 self.cookie_chars = json.load(f)
-            self.cookie_index = 0
+            self.cookie_index = diff
         else:
             cookie = self.cookie_chars[self.cookie_index]
             sheet = './Cookie/%s_sheet.png' % cookie["id"]

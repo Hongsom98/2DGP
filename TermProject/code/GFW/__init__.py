@@ -26,7 +26,7 @@ def run(start_state):
 
     open_canvas(w=w, h=h)
 
-    start_state.enter()
+    start_state.enter(0)
 
     global delta_time
     last_time = time.time()
@@ -57,12 +57,12 @@ def run(start_state):
 
     close_canvas()
 
-def change(state):
+def change(state, select):
     global stack
     if (len(stack) > 0):
         stack.pop().exit()
     stack.append(state)
-    state.enter()
+    state.enter(select)
 
 def push(state):
     global stack
