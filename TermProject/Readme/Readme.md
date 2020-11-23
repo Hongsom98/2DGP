@@ -33,3 +33,12 @@
 > > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/In_game.png">
 > - 개발 일정
 > > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/DevelopmentSchedule.PNG">
+
+> - 개발 진행 상황
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/DevelopmentSchedulePercent.PNG">
+
+> - 커밋 통계
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/CommitsInsights.PNG">
+
+> - 오브젝트 정보
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/ClassInfo.PNG">
