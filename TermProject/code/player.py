@@ -10,18 +10,18 @@ class Player:
     ANIMS_11x6 = [
         [ 0x40, 0x41, 0x42, 0x43 ], # RUNNING
         [ 0x50 ],                   # FALLING
-        [ 0x10 ],                   # HITTING
         [ 0x57, 0x58 ],             # JUMPING
         [ 0x51, 0x52, 0x53, 0x54 ], # DOUBLE_JUMP
         [ 0x59, 0x5A ],             # SLIDING
+        [ 0x10 ],                   # HITTING
     ]
     ANIMS_13x6 = [
         [ 0x40, 0x41, 0x42, 0x43 ], # RUNNING
         [ 0x50 ],                   # FALLING
-        [ 0x10 ],                   # HITTING
         [ 0x56, 0x57 ],             # JUMPING
         [ 0x51, 0x52, 0x53, 0x54 ], # DOUBLE_JUMP
         [ 0x58, 0x59 ],             # SLIDING
+        [ 0x10 ],                   # HITTING
     ]
     MAGNIFIED_RUN_ANIM = [ 0x44, 0x45, 0x46, 0x47 ]
     BB_DIFFS = [
@@ -30,6 +30,7 @@ class Player:
         (-60,-135,60,-20), # JUMPING
         (-60,-135,60,-20), # DOUBLE_JUMP
         (-80,-135,80,-68), # SLIDING
+        (-60,-135,60,0) # HITTING
     ]
     SLIDE_DURATION = 1.0
 
@@ -48,6 +49,9 @@ class Player:
         # self.anims = Player.ANIMS_11x6
         self.change_image(select + 1)
         self.state = Player.RUNNING
+        self.fall_over = False
+        self.mag_time = None
+        self.super = False
         # self.char_time = 0
         # self.cookie_name = 'Brave Cookie'
         print(select)
@@ -59,6 +63,11 @@ class Player:
     def state(self, state):
         self.__state = state
         self.anim = self.anims[state]
+        if state == 5:
+            self.hit_time = get_time()
+    def get_fall(self):
+        return self.fall_over
+
     def draw(self):
         anim = self.anim
         # if self.state == Player.RUNNING and self.mag > 1:
@@ -77,8 +86,13 @@ class Player:
 
     def magnify(self):
         self.mag_speed = 1.0
+        self.mag_time = get_time()
+        self.super = True
+
     def reduce(self):
         self.mag_speed = -1.0
+        self.mag_time = None
+        self.super = False
 
     def jump(self):
         if self.state in [Player.DOUBLE_JUMP]:
@@ -101,11 +115,14 @@ class Player:
         self.time += gfw.delta_time
         if self.state in [Player.JUMPING, Player.DOUBLE_JUMP, Player.FALLING]:
             # print('jump speed:', self.jump_speed)
-            self.move((0, self.jump_speed * gfw.delta_time))
+            if self.mag != 1:
+                self.move((0, self.jump_speed // 2* gfw.delta_time))
+            else:
+                self.move((0, self.jump_speed * gfw.delta_time))
             self.jump_speed -= Player.GRAVITY * self.mag * gfw.delta_time
         _,foot,_,_ = self.get_bb()
         if foot < 0:
-            self.move((0, get_canvas_height()))
+            self.fall_over = True
         platform = self.get_platform(foot)
         if platform is not None:
             l,b,r,t = platform.get_bb()
@@ -119,8 +136,17 @@ class Player:
                     self.move((0, t - foot))
                     self.state = Player.RUNNING
                     self.jump_speed = 0
-                    # print('Now running', t, foot)
-        print(self.state)
+        if self.state == Player.HITTING:
+            self.set_image_alpha(127)
+            if  get_time() - self.hit_time > 1.0:
+                self.state = Player.FALLING
+                self.set_image_alpha(255)
+        if self.mag_time != None and get_time() - self.mag_time > 3.5:
+            self.reduce()
+
+
+    def set_image_alpha(self, alpha):
+        SDL_SetTextureAlphaMod(self.image.texture, int(alpha))
 
     def get_platform(self, foot):
         selected = None
@@ -206,6 +232,9 @@ class Player:
             r *= self.mag
             t *= self.mag
         return x + l, y + b, x + r, y + t
+
+    def get_super(self):
+        return self.super
 
     def __getstate__(self):
         dict = self.__dict__.copy()

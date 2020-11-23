@@ -18,6 +18,15 @@ class Hpui:
             self.width -= 1
             self.drawLoc -= 0.5
         pass
+    @property
+    def width(self):
+        return self.__width
+    @width.setter
+    def width(self, width):
+        self.__width = width
+
+    def hp(self):
+        self.width += 20
 
     def draw(self):
         self.image.clip_draw(0, 0, self.width, 90, self.drawLoc, 590)

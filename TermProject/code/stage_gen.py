@@ -1,7 +1,7 @@
 import gfw
 from pico2d import *
 from platform import Platform
-from jelly import Jelly
+from items import Jelly
 import gobj
 from factory import Factory
 
@@ -46,10 +46,16 @@ def create_column():
 ignore_char_map = set()
 
 def create_object(ch, x, y):
-    if ch in ['1','2','3','4']:
+    if ch in ['1','2','3', '4']:
         obj = Jelly(ord(ch) - ord('1'), x, y)
         gfw.world.add(gfw.layer.item, obj)
         # print('creating Jelly', x, y)
+    elif ch in ['5', '6', '7', '8']:
+        obj = Jelly(ord(ch) - ord('1'), x, y)
+        gfw.world.add(gfw.layer.item, obj)
+    elif ch == '9':
+        obj = Jelly(ord(ch) - ord('1'), x, y)
+        gfw.world.add(gfw.layer.item, obj)
     elif ch in ['O','P','Q']:
         dy = 1 if ch == 'Q' else 3.8
         y -= int(dy * BLOCK_SIZE) // 2
