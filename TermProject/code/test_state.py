@@ -32,9 +32,10 @@ def enter(select):
     gfw.world.add(gfw.layer.ui, ui)
 
     stage_gen.load(gobj.res('stage_01.txt'))
-    global font, score
+    global font, score, targetscore
     font = gfw.font.load('res/CookieRun Regular.ttf', 35)
     score = 0
+    targetscore = 0
 
     global runfast, fast_time
     runfast = False
@@ -57,9 +58,19 @@ def update():
     if fast_time != None and get_time() - fast_time >= 3.5:
        runfast = False
 
+    global score, targetscore
+    if score < targetscore:
+        score+=9
+
+    if player.magnet == True:
+        magnet_activate()
+
     check_items()
     check_obstacles()
-    stage_gen.update(dx)
+    if runfast:
+        stage_gen.update(dx * 2)
+    else:
+        stage_gen.update(dx)
     check_game_over()
 
 def check_game_over():
@@ -68,15 +79,17 @@ def check_game_over():
     if ui.width < 67:
         hp_over = True
     if fall or hp_over:
-        print(fall, hp_over)
-        gfw.quit()
+        if fall:
+            gfw.quit()
+        elif hp_over:
+            player.state = 0
 
 def check_items():
     for item in gfw.world.objects_at(gfw.layer.item):
         if gobj.collides_box(player, item):
             if item.get_type() < 4:
-                global score
-                score += 100
+                global targetscore
+                targetscore += 100
             elif item.get_type() == 4:
                 global runfast, fast_time
                 runfast = True
@@ -88,12 +101,26 @@ def check_items():
             elif item.get_type() == 6:
                 ui.hp()
                 pass
+            elif item.get_type() == 7:
+                player.magnet = True
+
             #elif item.get_type() == 7:
             #    pass
             #elif item.get_type() == 8:
             #    pass
             gfw.world.remove(item)
             break
+
+def magnet_activate():
+    for jelly in gfw.world.objects_at(gfw.layer.item):
+        if jelly.get_type() < 4:
+            dx, dy = player.pos[0] - jelly.x, player.pos[1] - jelly.y
+            distance = math.sqrt(dx ** 2 + dy ** 2)
+            if distance == 0:
+                return
+            elif distance <= 500:
+                jelly.x -= 0.05 * player.pos[0]
+                jelly.y += 0.05 * (player.pos[1] - 240)
 
 def check_obstacles():
     for enemy in gfw.world.objects_at(gfw.layer.enemy):
@@ -102,6 +129,7 @@ def check_obstacles():
             if not player.state == 5:
                 if not player.get_super():
                     player.state = 5
+                    player.super = True
                     ui.player_colide()
                 enemy.hit = True
 

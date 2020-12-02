@@ -13,7 +13,7 @@ class Player:
         [ 0x57, 0x58 ],             # JUMPING
         [ 0x51, 0x52, 0x53, 0x54 ], # DOUBLE_JUMP
         [ 0x59, 0x5A ],             # SLIDING
-        [ 0x10 ],                   # HITTING
+        [ 0x10, 0x11, 0x12, 0x13, 0x14],# HITTING
     ]
     ANIMS_13x6 = [
         [ 0x40, 0x41, 0x42, 0x43 ], # RUNNING
@@ -21,7 +21,7 @@ class Player:
         [ 0x56, 0x57 ],             # JUMPING
         [ 0x51, 0x52, 0x53, 0x54 ], # DOUBLE_JUMP
         [ 0x58, 0x59 ],             # SLIDING
-        [ 0x10 ],                   # HITTING
+        [ 0x10, 0x11, 0x12, 0x13, 0x14],# HITTING
     ]
     MAGNIFIED_RUN_ANIM = [ 0x44, 0x45, 0x46, 0x47 ]
     BB_DIFFS = [
@@ -52,9 +52,8 @@ class Player:
         self.fall_over = False
         self.mag_time = None
         self.super = False
-        # self.char_time = 0
-        # self.cookie_name = 'Brave Cookie'
-        print(select)
+        self.magnet = False
+        self.magnet_time = None
 
     @property
     def state(self):
@@ -113,7 +112,7 @@ class Player:
         self.update_mag()
         self.cookie_time += gfw.delta_time
         self.time += gfw.delta_time
-        if self.state in [Player.JUMPING, Player.DOUBLE_JUMP, Player.FALLING]:
+        if self.state in [Player.JUMPING, Player.DOUBLE_JUMP, Player.FALLING, Player.HITTING]:
             # print('jump speed:', self.jump_speed)
             if self.mag != 1:
                 self.move((0, self.jump_speed // 2* gfw.delta_time))
@@ -138,9 +137,11 @@ class Player:
                     self.jump_speed = 0
         if self.state == Player.HITTING:
             self.set_image_alpha(127)
+            print('asdf')
             if  get_time() - self.hit_time > 1.0:
                 self.state = Player.FALLING
                 self.set_image_alpha(255)
+                self.super = False
         if self.mag_time != None and get_time() - self.mag_time > 3.5:
             self.reduce()
 

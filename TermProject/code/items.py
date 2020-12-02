@@ -16,7 +16,7 @@ def get_jelly_rect(index):
     return x, y, JELLY_SIZE, JELLY_SIZE
 
 
-class Jelly:
+class Items:
     TYPE_1, TYPE_2, TYPE_3, TYPE_F, TYPE_B, TYPE_HP, TYPE_C, TYPE_BJ, TYPE_RC = range(9)
     def __init__(self, type, x, y):
         self.x, self.y = x, y
@@ -34,7 +34,7 @@ class Jelly:
         elif type == 6:
             self.image = gfw.image.load(gobj.res('smallhp.png'))
         elif type == 7:
-            self.image = gfw.image.load(gobj.res('jellytocoin.png'))
+            self.image = gfw.image.load(gobj.res('magnet.png'))
         elif type == 8:
             self.image = gfw.image.load(gobj.res('coin.png'))
     def update(self): pass
