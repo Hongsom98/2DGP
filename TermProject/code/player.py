@@ -6,7 +6,7 @@ import json
 PLAYER_SIZE = 270
 
 class Player:
-    RUNNING, FALLING, JUMPING, DOUBLE_JUMP, SLIDING, HITTING = range(6)
+    RUNNING, FALLING, JUMPING, DOUBLE_JUMP, SLIDING, HITTING, DIE = range(7)
     ANIMS_11x6 = [
         [ 0x40, 0x41, 0x42, 0x43 ], # RUNNING
         [ 0x50 ],                   # FALLING
@@ -14,6 +14,7 @@ class Player:
         [ 0x51, 0x52, 0x53, 0x54 ], # DOUBLE_JUMP
         [ 0x59, 0x5A ],             # SLIDING
         [ 0x10, 0x11, 0x12, 0x13, 0x14],# HITTING
+        [ 0x15, 0x16, 0x17, 0x18],# DIE
     ]
     ANIMS_13x6 = [
         [ 0x40, 0x41, 0x42, 0x43 ], # RUNNING
@@ -22,6 +23,7 @@ class Player:
         [ 0x51, 0x52, 0x53, 0x54 ], # DOUBLE_JUMP
         [ 0x58, 0x59 ],             # SLIDING
         [ 0x10, 0x11, 0x12, 0x13, 0x14],# HITTING
+        [ 0x15, 0x16, 0x17, 0x18],  # DIE
     ]
     MAGNIFIED_RUN_ANIM = [ 0x44, 0x45, 0x46, 0x47 ]
     BB_DIFFS = [
@@ -30,7 +32,8 @@ class Player:
         (-60,-135,60,-20), # JUMPING
         (-60,-135,60,-20), # DOUBLE_JUMP
         (-80,-135,80,-68), # SLIDING
-        (-60,-135,60,0) # HITTING
+        (-60,-135,60,0), # HITTING
+        (-80,-135,80,-68), # DIE
     ]
     SLIDE_DURATION = 1.0
 
@@ -48,12 +51,14 @@ class Player:
         self.mag_speed = 0
         # self.anims = Player.ANIMS_11x6
         self.change_image(select + 1)
+        self.select = select
         self.state = Player.RUNNING
         self.fall_over = False
         self.mag_time = None
         self.super = False
         self.magnet = False
         self.magnet_time = None
+        self.game_over = False
 
     @property
     def state(self):
@@ -66,6 +71,13 @@ class Player:
             self.hit_time = get_time()
     def get_fall(self):
         return self.fall_over
+    def get_gameover(self):
+        anim = self.anim
+        # if self.state == Player.RUNNING and self.mag > 1:
+        #     anim = Player.MAGNIFIED_RUN_ANIM
+        fidx = round(self.time * self.FPS) % len(anim)
+        sprite_num = anim[fidx]
+        return sprite_num
 
     def draw(self):
         anim = self.anim
@@ -78,6 +90,9 @@ class Player:
         y = y * (PLAYER_SIZE + 2) + 2
         size = PLAYER_SIZE * self.mag, PLAYER_SIZE * self.mag
         self.image.clip_draw(x, y, PLAYER_SIZE, PLAYER_SIZE, *self.pos, *size)
+
+        #if self.state == 6:
+        #    delay(0.1)
 
         if self.cookie_time < 3.0:
             font = gfw.font.load(gobj.res('ENCR10B.TTF'), 30)
@@ -137,13 +152,14 @@ class Player:
                     self.jump_speed = 0
         if self.state == Player.HITTING:
             self.set_image_alpha(127)
-            print('asdf')
             if  get_time() - self.hit_time > 1.0:
                 self.state = Player.FALLING
                 self.set_image_alpha(255)
-                self.super = False
         if self.mag_time != None and get_time() - self.mag_time > 3.5:
             self.reduce()
+        if self.magnet_time != None and get_time() - self.magnet_time > 5.0:
+            self.magnet = False
+            self.magnet_time = None
 
 
     def set_image_alpha(self, alpha):

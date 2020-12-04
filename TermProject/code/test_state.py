@@ -7,6 +7,7 @@ from background import HorzScrollBackground
 from platform import Platform
 import HPui
 import stage_gen
+import Scene_Result
 
 canvas_width = 1120
 canvas_height = 630
@@ -29,6 +30,8 @@ def enter(select):
 
     global ui
     ui= HPui.Hpui(0.05)
+    if player.select == 3:
+        ui.set_dwidth(1, 0.05)
     gfw.world.add(gfw.layer.ui, ui)
 
     stage_gen.load(gobj.res('stage_01.txt'))
@@ -43,7 +46,13 @@ def enter(select):
 
 paused = False
 def update():
-    if paused:
+    global score, targetscore
+    if player.state == 6:
+        for pobj in gfw.world.objects_at(gfw.layer.player):
+            pobj.update()
+            if pobj.get_gameover() == 20:
+                Scene_Result.set_score(score)
+                gfw.change(Scene_Result, player.select)
         return
     gfw.world.update()
 
@@ -53,22 +62,27 @@ def update():
         for obj in gfw.world.objects_at(layer):
             if runfast:
                 obj.move(dx * 2)
+            elif player.select == 5:
+                obj.move(dx * 1.5)
             else:
                 obj.move(dx)
     if fast_time != None and get_time() - fast_time >= 3.5:
        runfast = False
 
-    global score, targetscore
     if score < targetscore:
-        score+=9
+        score += 9
 
     if player.magnet == True:
-        magnet_activate()
+        magnet_activate(500, 0.05)
+    if player.select == 14:
+        magnet_activate(300, 0.01)
 
     check_items()
     check_obstacles()
     if runfast:
         stage_gen.update(dx * 2)
+    elif player.select == 5:
+        stage_gen.update(dx * 1.5)
     else:
         stage_gen.update(dx)
     check_game_over()
@@ -77,12 +91,10 @@ def check_game_over():
     fall = player.get_fall()
     hp_over = False
     if ui.width < 67:
-        hp_over = True
-    if fall or hp_over:
-        if fall:
-            gfw.quit()
-        elif hp_over:
-            player.state = 0
+        Player.state = 6
+    if fall:
+        Scene_Result.set_score(score)
+        gfw.change(Scene_Result, player.select)
 
 def check_items():
     for item in gfw.world.objects_at(gfw.layer.item):
@@ -103,6 +115,7 @@ def check_items():
                 pass
             elif item.get_type() == 7:
                 player.magnet = True
+                player.magnet_time = get_time()
 
             #elif item.get_type() == 7:
             #    pass
@@ -111,16 +124,17 @@ def check_items():
             gfw.world.remove(item)
             break
 
-def magnet_activate():
+def magnet_activate(a, b):
     for jelly in gfw.world.objects_at(gfw.layer.item):
         if jelly.get_type() < 4:
             dx, dy = player.pos[0] - jelly.x, player.pos[1] - jelly.y
             distance = math.sqrt(dx ** 2 + dy ** 2)
             if distance == 0:
                 return
-            elif distance <= 500:
-                jelly.x -= 0.05 * player.pos[0]
-                jelly.y += 0.05 * (player.pos[1] - 240)
+            elif distance <= a:
+                jelly.x -= b * player.pos[0]
+                jelly.y += b * ( dy - 40)
+                print(player.pos[1])
 
 def check_obstacles():
     for enemy in gfw.world.objects_at(gfw.layer.enemy):
@@ -129,7 +143,6 @@ def check_obstacles():
             if not player.state == 5:
                 if not player.get_super():
                     player.state = 5
-                    player.super = True
                     ui.player_colide()
                 enemy.hit = True
 
@@ -147,7 +160,8 @@ def handle_event(e):
         return
     elif e.type == SDL_KEYDOWN:
         if e.key == SDLK_ESCAPE:
-            gfw.pop()
+            Scene_Result.set_score(score)
+            gfw.change(Scene_Result, player.select)
             return
         elif e.key == SDLK_a:
             # player.pos = 150,650
