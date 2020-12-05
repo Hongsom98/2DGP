@@ -15,6 +15,35 @@ SCORE_TEXT_COLOR = (255, 255, 255)
 
 def enter(select):
     gfw.world.init(['bg', 'platform', 'enemy', 'item', 'player', 'ui'])
+    global bgm, effect_j, effect_s, effect_jelly, effect_hp, effect_obs
+    bgm = load_music('./res/Cookie Run Ovenbreak - Theme Song Breakout 1.mp3')
+    if select == -1:
+        effect_j = load_wav('res/ch02jump.wav')
+        effect_s = load_wav('res/ch01slide.wav')
+    elif select == 0:
+        effect_j = load_wav('res/ch02jump.wav')
+        effect_s = load_wav('res/ch02slide.wav')
+    elif select == 5:
+        effect_j = load_wav('res/ch07jump.wav')
+        effect_s = load_wav('res/ch07slide.wav ')
+    elif select == 14:
+        effect_j = load_wav('res/ch01jump.wav')
+        effect_s = load_wav('res/ch01slide.wav')
+    elif select == 3:
+        effect_j = load_wav('res/ch05jump.wav')
+        effect_s = load_wav('res/ch05slide.wav')
+    effect_jelly = load_wav('res/g_jelly.wav')
+    effect_hp = load_wav('res/i_small_energy.wav')
+    effect_obs = load_wav('res/g_obs1.wav')
+
+    effect_s.get_volume()
+    effect_j.get_volume()
+    effect_jelly.get_volume()
+    effect_hp.get_volume()
+    effect_obs.get_volume()
+    bgm.get_volume()
+
+    bgm.repeat_play()
 
     center = get_canvas_width() // 2, get_canvas_height() // 2
 
@@ -43,6 +72,8 @@ def enter(select):
     global runfast, fast_time
     runfast = False
     fast_time = None
+
+
 
 paused = False
 def update():
@@ -102,6 +133,7 @@ def check_items():
             if item.get_type() < 4:
                 global targetscore
                 targetscore += 100
+                effect_jelly.play(1)
             elif item.get_type() == 4:
                 global runfast, fast_time
                 runfast = True
@@ -112,6 +144,7 @@ def check_items():
                 pass
             elif item.get_type() == 6:
                 ui.hp()
+                effect_hp.play(1)
                 pass
             elif item.get_type() == 7:
                 player.magnet = True
@@ -144,6 +177,7 @@ def check_obstacles():
                 if not player.get_super():
                     player.state = 5
                     ui.player_colide()
+                    effect_obs.play(1)
                 enemy.hit = True
 
 def draw():
@@ -163,6 +197,10 @@ def handle_event(e):
             Scene_Result.set_score(score)
             gfw.change(Scene_Result, player.select)
             return
+        elif e.key == SDLK_RETURN:
+            effect_s.play(1)
+        elif e.key == SDLK_SPACE:
+            effect_j.play(1)
         elif e.key == SDLK_a:
             # player.pos = 150,650
             # for x, y in [(100,400),(400,300),(650,250),(900,200)]:
@@ -179,6 +217,8 @@ def handle_event(e):
         return
 
 def exit():
+    global bgm
+    del bgm
     pass
 
 

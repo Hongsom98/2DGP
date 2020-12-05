@@ -17,6 +17,7 @@ def enter(select):
     global zombiex, zombiey, zombiesize
     global anglex, angley, anglesize
     global coonkux, coonkuy, coonkusize
+    global bgm, effect
     bg1 = HorzScrollBackground('Menu_bg_01.png')
     bg1.speed = 10
     bg2 = HorzScrollBackground('Menu_bg_02.png')
@@ -48,15 +49,24 @@ def enter(select):
     coonkuy = 344
     coonkusize = (344, 344)
     show_cursor()
+
+    bgm = load_wav('./res/bgm_main_rockstar.wav')
+    bgm.get_volume()
+    bgm.repeat_play()
+
+    effect = load_wav('./res/ui_3.wav')
+    effect.get_volume()
     pass
 
 def exit():
-    global brave, bright, zombie, angle, coonku
+    global brave, bright, zombie, angle, coonku, bgm, effect
     del brave
     del bright
     del zombie
     del angle
     del coonku
+    del bgm
+    del effect
     pass
 
 def update():
@@ -67,6 +77,8 @@ def update():
     global anglex, angley
     global coonkux, coonkuy
     global select
+    global effect
+    global oldmouse
     bg1.update()
     bg2.update()
 
@@ -86,7 +98,10 @@ def update():
     if coonkux > 1382:
         coonkux = 0
 
+
     if mouse[0] > 405 and mouse[0] < 650 and mouse[1] > 550 and mouse[1] < 610:
+        if oldmouse != mouse:
+            effect.play(1)
         gfw.change(test_state, select)
     elif mouse[0] > 50 and mouse[0] < 150 and mouse[1] > canvas_height / 2 and mouse[1] < canvas_height / 2 + 270:
         select = -1
@@ -95,6 +110,8 @@ def update():
         zombiey = 360
         angley = 320
         coonkuy = 344
+        if oldmouse != mouse:
+            effect.play(1)
     elif mouse[0] > 250 and mouse[0] < 350 and mouse[1] > canvas_height / 2 and mouse[1] < canvas_height / 2 + 270:
         select = 0
         brighty = 0
@@ -102,6 +119,8 @@ def update():
         zombiey = 360
         angley = 320
         coonkuy = 344
+        if oldmouse != mouse:
+            effect.play(1)
     elif mouse[0] > 450 and mouse[0] < 550 and mouse[1] > canvas_height / 2 and mouse[1] < canvas_height / 2 + 270:
         select = 5
         zombiey = 0
@@ -109,6 +128,8 @@ def update():
         brighty = 288
         angley = 320
         coonkuy = 344
+        if oldmouse != mouse:
+            effect.play(1)
     elif mouse[0] > 650 and mouse[0] < 750 and mouse[1] > canvas_height / 2 and mouse[1] < canvas_height / 2 + 270:
         select = 14
         angley = 0
@@ -116,6 +137,8 @@ def update():
         brighty = 288
         zombiey = 360
         coonkuy = 344
+        if oldmouse != mouse:
+            effect.play(1)
     elif mouse[0] > 850 and mouse[0] < 950 and mouse[1] > canvas_height / 2 and mouse[1] < canvas_height / 2 + 200:
         select = 3
         coonkuy = 0
@@ -123,7 +146,11 @@ def update():
         brighty = 288
         zombiey = 360
         angley = 320
+        if oldmouse != mouse:
+            effect.play(1)
 
+
+    oldmouse = mouse
     delay(0.03)
     pass
 

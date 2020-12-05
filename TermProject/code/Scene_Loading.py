@@ -8,6 +8,7 @@ canvas_height = 630
 
 def enter(select):
     global image, loading, loading_x, previous_time, speed
+    global bgm
     hide_cursor()
     image = load_image('./res/title.png')
     loading = load_image('./res/title_loading.png')
@@ -15,13 +16,19 @@ def enter(select):
     loading_x = -512.0
     speed = 3.5
 
+    bgm = load_music('./res/loading sound - cutting2.mp3')
+    bgm.get_volume()
+    bgm.repeat_play()
+
     previous_time = get_time()
     pass
 
 def exit():
     global  image, loading
+    global bgm
     del image
     del loading
+    del bgm
     pass
 
 def update():

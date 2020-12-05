@@ -60,6 +60,7 @@ class Player:
         self.magnet_time = None
         self.game_over = False
 
+
     @property
     def state(self):
         return self.__state

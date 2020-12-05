@@ -11,6 +11,7 @@ def enter(select):
     global player, playerx, playery, playersize, playerfidx
     global bg
     global score, font, targetscore
+    global bgm
     if select == -1:
         player = load_image('./res/Menu_cookie_01.png')
         playerx = 0
@@ -45,6 +46,10 @@ def enter(select):
     score = 0
     font = gfw.font.load('res/CookieRun Regular.ttf', 35)
 
+    bgm = load_music('./res/finish 2.mp3')
+    bgm.get_volume()
+    bgm.play()
+
 def draw():
     bg.draw(canvas_width / 2, canvas_height / 2, 1120, 630)
     player.clip_draw(playerx, playery, *playersize, canvas_width / 2, canvas_height / 2 + 50)
@@ -70,15 +75,25 @@ def update():
         playerx = 0
         fidxCnt = 0
     if score < targetscore:
-        score += 69
-        if score > targetscore:
-            score = targetscore
+        if targetscore < 5000:
+            score += 69
+        elif targetscore < 10000:
+            score += 169
+        elif targetscore < 20000:
+            score += 569
+        elif targetscore < 30000:
+            score += 769
+        elif targetscore < 40000:
+            score += 987
+    if score > targetscore:
+        score = targetscore
 
 def set_score(pscore):
     global targetscore
     targetscore = pscore
 
 def exit():
-    global player
+    global player, bgm
     del player
+    del bgm
 
