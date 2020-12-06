@@ -40,10 +40,10 @@ def distance_sq(point1, point2):
 def distance(point1, point2):
 	math.sqrt(distance_sq(point1, point2))
 	
-def draw_collision_box():
-	for obj in gfw.world.all_objects():
-		if hasattr(obj, 'get_bb'):
-			draw_rectangle(*obj.get_bb())
+#def draw_collision_box():
+#	for obj in gfw.world.all_objects():
+#		if hasattr(obj, 'get_bb'):
+#			draw_rectangle(*obj.get_bb())
 
 def mouse_xy(event):
     return event.x, get_canvas_height() - event.y - 1

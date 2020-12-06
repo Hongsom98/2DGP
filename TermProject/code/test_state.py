@@ -4,7 +4,7 @@ from pico2d import *
 import gobj
 from player import Player
 from background import HorzScrollBackground
-from platform import Platform
+from floor import Platform
 import HPui
 import stage_gen
 import Scene_Result
@@ -27,7 +27,7 @@ def enter(select):
         effect_j = load_wav('res/ch07jump.wav')
         effect_s = load_wav('res/ch07slide.wav ')
     elif select == 14:
-        effect_j = load_wav('res/ch01jump.wav')
+        effect_j = load_wav('res/ch02jump.wav')
         effect_s = load_wav('res/ch01slide.wav')
     elif select == 3:
         effect_j = load_wav('res/ch05jump.wav')
@@ -81,6 +81,7 @@ def update():
     if player.state == 6:
         for pobj in gfw.world.objects_at(gfw.layer.player):
             pobj.update()
+            #print(pobj.get_gameover())
             if pobj.get_gameover() == 20:
                 Scene_Result.set_score(score)
                 gfw.change(Scene_Result, player.select)
@@ -167,7 +168,7 @@ def magnet_activate(a, b):
             elif distance <= a:
                 jelly.x -= b * player.pos[0]
                 jelly.y += b * ( dy - 40)
-                print(player.pos[1])
+                #print(player.pos[1])
 
 def check_obstacles():
     for enemy in gfw.world.objects_at(gfw.layer.enemy):
@@ -182,7 +183,7 @@ def check_obstacles():
 
 def draw():
     gfw.world.draw()
-    gobj.draw_collision_box()
+    #gobj.draw_collision_box()
     score_pos = 30, get_canvas_height() - 30
     global score
     font.draw(*score_pos, 'Score : %0d' % score, SCORE_TEXT_COLOR)

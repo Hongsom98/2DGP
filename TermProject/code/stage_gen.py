@@ -1,6 +1,6 @@
 import gfw
 from pico2d import *
-from platform import Platform
+import floor
 from items import Items
 import gobj
 from factory import Factory
@@ -60,7 +60,7 @@ def create_object(ch, x, y):
         dy = 1 if ch == 'Q' else 3.8
         y -= int(dy * BLOCK_SIZE) // 2
         x -= BLOCK_SIZE // 2
-        obj = Platform(ord(ch) - ord('O'), x, y)
+        obj = floor.Platform(ord(ch) - ord('O'), x, y)
         gfw.world.add(gfw.layer.platform, obj)
         # print('creating Platform', x, y)
     else:

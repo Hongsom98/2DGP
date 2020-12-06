@@ -54,7 +54,7 @@ def draw():
     bg.draw(canvas_width / 2, canvas_height / 2, 1120, 630)
     player.clip_draw(playerx, playery, *playersize, canvas_width / 2, canvas_height / 2 + 50)
     font.draw(canvas_width / 2 - 100, canvas_height - 200, 'Score : %0d' % score, SCORE_TEXT_COLOR)
-    print(score, targetscore)
+    #print(score, targetscore)
     delay(0.05)
 
 def handle_event(e):
@@ -62,6 +62,7 @@ def handle_event(e):
         gfw.quit()
     elif e.type == SDL_KEYDOWN:
         if e.key == SDLK_RETURN:
+            gfw.world.clear()
             gfw.change(Scene_Menu, 0)
         elif e.key == SDLK_ESCAPE:
             gfw.quit()

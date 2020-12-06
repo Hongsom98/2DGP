@@ -72,6 +72,7 @@ class Player:
             self.hit_time = get_time()
     def get_fall(self):
         return self.fall_over
+
     def get_gameover(self):
         anim = self.anim
         # if self.state == Player.RUNNING and self.mag > 1:
