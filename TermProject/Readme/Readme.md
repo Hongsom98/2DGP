@@ -42,3 +42,15 @@
 
 > - 오브젝트 정보
 > > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/ClassInfo.PNG">
+
+> - 최종 진행 상황
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/LastDevelopment.PNG">
+
+> - 최종 커밋 통계
+> > - <img src="https://github.com/Hongsom98/2DGP/blob/master/TermProject/Readme/LastCommitInsight.PNG">
+
+> - 지인 플레이 영상 
+> > - https://youtu.be/oUlQSbrUw6s
+
+> - 지인 인터뷰 영상
+> > - https://youtu.be/idAIg-jqA24
