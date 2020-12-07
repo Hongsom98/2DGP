@@ -1,6 +1,7 @@
 from pico2d import *
 import gfw
 import Scene_Menu
+import Scene_Loading
 
 canvas_width = 1120
 canvas_height = 630
@@ -62,7 +63,7 @@ def handle_event(e):
         gfw.quit()
     elif e.type == SDL_KEYDOWN:
         if e.key == SDLK_RETURN:
-            gfw.world.clear()
+            #gfw.world.clear()
             gfw.change(Scene_Menu, 0)
         elif e.key == SDLK_ESCAPE:
             gfw.quit()

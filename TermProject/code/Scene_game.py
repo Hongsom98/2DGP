@@ -73,18 +73,18 @@ def enter(select):
     runfast = False
     fast_time = None
 
+    global die_time
 
 
 paused = False
 def update():
     global score, targetscore
     if player.state == 6:
-        for pobj in gfw.world.objects_at(gfw.layer.player):
-            pobj.update()
-            #print(pobj.get_gameover())
-            if pobj.get_gameover() == 20:
-                Scene_Result.set_score(score)
-                gfw.change(Scene_Result, player.select)
+        delay(0.05)
+        player.update()
+        if get_time() - die_time > 0.5:
+            Scene_Result.set_score(score)
+            gfw.change(Scene_Result, player.select)
         return
     gfw.world.update()
 
@@ -123,7 +123,9 @@ def check_game_over():
     fall = player.get_fall()
     hp_over = False
     if ui.width < 67:
-        Player.state = 6
+        player.state = 6
+        global die_time
+        die_time = get_time()
     if fall:
         Scene_Result.set_score(score)
         gfw.change(Scene_Result, player.select)
@@ -150,11 +152,6 @@ def check_items():
             elif item.get_type() == 7:
                 player.magnet = True
                 player.magnet_time = get_time()
-
-            #elif item.get_type() == 7:
-            #    pass
-            #elif item.get_type() == 8:
-            #    pass
             gfw.world.remove(item)
             break
 

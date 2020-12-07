@@ -154,7 +154,7 @@ class Player:
                     self.jump_speed = 0
         if self.state == Player.HITTING:
             self.set_image_alpha(127)
-            if  get_time() - self.hit_time > 1.0:
+            if  get_time() - self.hit_time > 2.0:
                 self.state = Player.FALLING
                 self.set_image_alpha(255)
         if self.mag_time != None and get_time() - self.mag_time > 3.5:

@@ -1,6 +1,6 @@
 from pico2d import *
 import gfw
-import test_state
+import Scene_game
 from background import HorzScrollBackground
 
 canvas_width = 1120
@@ -60,6 +60,7 @@ def enter(select):
 
 def exit():
     global brave, bright, zombie, angle, coonku, bgm, effect
+    global mouse, oldmouse
     del brave
     del bright
     del zombie
@@ -67,6 +68,8 @@ def exit():
     del coonku
     del bgm
     del effect
+    mouse = (0,0)
+    oldmouse = (0,0)
     pass
 
 def update():
@@ -102,7 +105,7 @@ def update():
     if mouse[0] > 405 and mouse[0] < 650 and mouse[1] > 550 and mouse[1] < 610:
         if oldmouse != mouse:
             effect.play(1)
-        gfw.change(test_state, select)
+        gfw.change(Scene_game, select)
     elif mouse[0] > 50 and mouse[0] < 150 and mouse[1] > canvas_height / 2 and mouse[1] < canvas_height / 2 + 270:
         select = -1
         bravey = 0
